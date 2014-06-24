@@ -59,7 +59,7 @@ var IpWidget_SimpleProduct = function () {
         var data = {
             aa: 'ProductWidget.widgetPopupForm',
             securityToken: ip.securityToken,
-            widgetId: this.widgetObject.data('widgetId')
+            widgetId: this.widgetObject.data('widgetid')
         }
 
         $.ajax({
@@ -92,10 +92,17 @@ var IpWidget_SimpleProduct = function () {
         var formData = $('#ipWidgetSimpleProductPopup form').serializeArray();
         var data = {};
         $.each(formData, function(key, value) {
-            if ($.inArray(value.name, ['title', 'price', 'currency', 'images', 'description']) > -1) {
+            if ($.inArray(value.name, ['title', 'price', 'currency', 'description']) > -1) {
                 data[value.name] = value.value;
             }
+            if (value.name == 'images[]') {
+                if (!data['images']) {
+                    data['images'] = [];
+                }
+                data['images'].push(value.value);
+            }
         });
+
 
 
 

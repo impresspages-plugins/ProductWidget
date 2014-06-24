@@ -31,5 +31,76 @@ class Controller extends \Ip\WidgetController
     }
 
 
+    /**
+     * Renders widget's HTML output
+     *
+     * You can extend this method when generating widget's HTML.
+     *
+     * @param int $revisionId Widget revision ID
+     * @param int $widgetId Widget ID
+     * @param int $widgetId Widget instance ID
+     * @param array $data Widget data array
+     * @param string $skin Skin name
+     * @return string Widget's HTML code
+     */
+
+    public function generateHtml($revisionId, $widgetId, $data, $skin)
+    {
+        $imageOptions = array(
+            'type' => 'width',
+            'width' => ipGetOption('SimpleProduct.imageWidth', 400),
+            //'height' => ipGetOption('SimpleProduct.imageHeight', 1000),
+            'forced' => true //smaller images will be scaled up if set to true
+        );
+
+        $lightboxOptions = array(
+            'type' => 'fit',
+            'width' => ipGetOption('Config.lightboxWidth', 800),
+            'height' => ipGetOption('Config.lightboxHeight', 600)
+        );
+
+        $thumbOptions = array(
+            'type' => 'center',
+            'width' => ipGetOption('SimpleProduct.imagesWidth', 50),
+            'height' => ipGetOption('SimpleProduct.imagesHeight', 40),
+            //'height' => ipGetOption('SimpleProduct.imageHeight', 1000),
+            'forced' => true //smaller images will be scaled up if set to true
+        );
+
+        if (!isset($data['title'])) {
+            $data['title'] = '';
+        }
+        if (!isset($data['description'])) {
+            $data['description'] = '';
+        }
+
+        if (empty($data['images']) || !is_array($data['images'])) {
+            $data['images'] = [];
+        }
+        $data['originalImages'] = $data['images'];
+
+        if (!empty($data['originalImages'][0])) {
+            $data['image'] = ipFileUrl(ipReflection($data['originalImages'][0], $imageOptions));
+            $data['imageBig'] = ipFileUrl(ipReflection($data['originalImages'][0], $lightboxOptions));
+
+        } else {
+            $data['image'] = '';
+            $data['imageBig'] = '';
+        }
+
+        $data['images'] = array();
+        $data['imagesBig'] = array();
+        foreach($data['originalImages'] as $key => $image) {
+            if ($key == 0) {
+                continue; //skip first image;
+            }
+            $data['images'][] = ipFileUrl(ipReflection($image, $thumbOptions));
+
+            $data['imagesBig'][] = ipFileUrl(ipReflection($image, $lightboxOptions));
+        }
+
+
+        return parent::generateHtml($revisionId, $widgetId, $data, $skin);
+    }
 
 }

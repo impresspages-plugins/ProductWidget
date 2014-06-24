@@ -18,6 +18,11 @@ class AdminController
 {
     public function widgetPopupForm()
     {
+        $widgetId = ipRequest()->getQuery('widgetId');
+
+        $widgetRecord = \Ip\Internal\Content\Model::getWidgetRecord($widgetId);
+        $widgetData = $widgetRecord['data'];
+
         $form = new \Ip\Form();
 
         $form->setEnvironment(\Ip\Form::ENVIRONMENT_ADMIN);
@@ -26,7 +31,8 @@ class AdminController
         $form->addField(new \Ip\Form\Field\Text(
                 array(
                     'name' => 'title',
-                    'label' => __( 'Title', 'SimpleProduct', false )
+                    'label' => __( 'Title', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['title']) ? null : $widgetData['title']
                 )
             )
         );
@@ -34,7 +40,8 @@ class AdminController
         $form->addField(new \Ip\Form\Field\Text(
                 array(
                     'name' => 'price',
-                    'label' => __( 'Price', 'SimpleProduct', false )
+                    'label' => __( 'Price', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['price']) ? null : $widgetData['price']
                 )
             )
         );
@@ -42,7 +49,8 @@ class AdminController
         $form->addField(new \Ip\Form\Field\Text(
                 array(
                     'name' => 'currency',
-                    'label' => __( 'Currency (eg. USD)', 'SimpleProduct', false )
+                    'label' => __( 'Currency (eg. USD)', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['currency']) ? null : $widgetData['currency']
                 )
             )
         );
@@ -50,8 +58,8 @@ class AdminController
         $form->addField(new \Ip\Form\Field\RepositoryFile(
                 array(
                     'name' => 'images',
-                    'label' => __( 'Image', 'SimpleProduct', false ),
-                    'fileLimit' => 1
+                    'label' => __( 'Images', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['images']) ? null : $widgetData['images']
                 )
             )
         );
@@ -59,7 +67,8 @@ class AdminController
         $form->addField(new \Ip\Form\Field\RichText(
                 array(
                     'name' => 'description',
-                    'label' => __( 'Description', 'SimpleProduct', false )
+                    'label' => __( 'Description', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['description']) ? null : $widgetData['description']
                 )
             )
         );

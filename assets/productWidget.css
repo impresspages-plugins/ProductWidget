@@ -1,0 +1,21 @@
+.ipWidget-SimpleProduct ._images {
+    width: 50%;
+    float: left;
+}
+
+.ipWidget-SimpleProduct ._image img{
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+
+.ipWidget-SimpleProduct ._info {
+    width: 48%;
+    float: right;
+    padding-left: 2%;
+}
+
+.ipWidget-SimpleProduct ._thumb img {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
