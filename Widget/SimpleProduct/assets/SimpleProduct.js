@@ -7,7 +7,6 @@ var IpWidget_SimpleProduct = function () {
 
     this.widgetObject = null;
     this.confirmButton = null;
-    this.popup = null;
     this.data = {};
 
     this.init = function (widgetObject, data) {
@@ -54,6 +53,7 @@ var IpWidget_SimpleProduct = function () {
     };
 
     var openPopup = function () {
+        var context = this;
         $('#ipWidgetSimpleProductPopup').remove(); //remove any existing popup.
 
         var data = {
@@ -71,44 +71,38 @@ var IpWidget_SimpleProduct = function () {
                 //create new popup
                 var $popupHtml = $(response.popup);
                 $('body').append($popupHtml);
-                this.popup = $('#ipWidgetSimpleProductPopup .ipsModal');
-                this.popup.modal();
+                var $popup = $('#ipWidgetSimpleProductPopup .ipsModal');
+                $popup.modal();
                 ipInitForms();
+                $popup.find('.ipsConfirm').on('click', $.proxy(save, context));
             },
             error: function (response) {
                 alert('Error: ' + response.responseText);
+            }
+
+        });
+
+
+
+    };
+
+    var save = function () {
+
+
+        var formData = $('#ipWidgetSimpleProductPopup form').serializeArray();
+        var data = {};
+        $.each(formData, function(key, value) {
+            if ($.inArray(value.name, ['title', 'price', 'currency', 'images', 'description']) > -1) {
+                data[value.name] = value.value;
             }
         });
 
 
 
 
-//        this.confirmButton = this.popup.find('.ipsConfirm');
-//        this.title = this.popup.find('input[name=]');
-//        this.price = this.popup.find('input[name=]');
-//        this.currency = this.popup.find('input[name=]');
-//        this. = this.popup.find('input[name=]');
-//        this. = this.popup.find('input[name=]');
-//
-//        if (this.data.html) {
-//            this.textarea.val(this.data.html);
-//        } else {
-//            this.textarea.val(''); // cleanup value if it was set before
-//        }
-//
-//        this.popup.modal(); // open modal popup
-//
-//        this.confirmButton.off(); // ensure we will not bind second time
-//        this.confirmButton.on('click', $.proxy(save, this));
-    };
-
-    var save = function () {
-        var data = {
-            html: this.textarea.val()
-        };
-
         this.widgetObject.save(data, 1); // save and reload widget
-        this.popup.modal('hide');
+        var $popup = $('#ipWidgetSimpleProductPopup .ipsModal');
+        $popup.modal('hide');
     };
 
 };
