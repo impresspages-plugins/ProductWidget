@@ -18,6 +18,9 @@
     <h3 class="_title"><?php echo esc($title) ?></h3>
     <div class="_description">
         <?php echo $description ?>
-        <p><span class="button"><?php _e('Buy', 'SimpleProduct') ?></span></p>
+        <?php if (!empty($price)) { ?>
+            <p class="_price"><?php echo ipFormatPrice($price * 100  , $currency, 'SimpleProduct') ?></p>
+        <?php } ?>
+        <p><span class="_button button"><?php _e('Buy', 'SimpleProduct') ?></span></p>
     </div>
 </div>

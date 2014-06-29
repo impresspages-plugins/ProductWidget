@@ -73,6 +73,9 @@ class Controller extends \Ip\WidgetController
         if (!isset($data['description'])) {
             $data['description'] = '';
         }
+        if (!isset($data['currency'])) {
+            $data['currency'] = 'USD';
+        }
 
         if (empty($data['images']) || !is_array($data['images'])) {
             $data['images'] = [];

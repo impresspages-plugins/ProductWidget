@@ -73,6 +73,31 @@ class AdminController
             )
         );
 
+        $form->addField(new \Ip\Form\Field\Checkbox(
+                array(
+                    'name' => 'requireLogin',
+                    'label' => __( 'Require user registration', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['requireLogin']) ? null : $widgetData['requireLogin']
+                )
+            )
+        );
+
+        $values = array(
+            array('physical', __('Physical', 'SimpleProduct', false)),
+            array('downloadable', __('Downloadable', 'SimpleProduct', false)),
+            array('virtual', __('Virtual', 'SimpleProduct', false)),
+        );
+        $form->addField(new \Ip\Form\Field\Select(
+                array(
+                    'name' => 'type',
+                    'values' => $values,
+                    'label' => __( 'Product type', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['type']) ? null : $widgetData['type']
+                )
+            )
+        );
+
+
         $popup = ipView('view/editPopup.php', array('form' => $form))->render();
         $data = array(
             'popup' => $popup

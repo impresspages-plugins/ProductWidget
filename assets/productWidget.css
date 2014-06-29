@@ -19,3 +19,8 @@
     margin-right: 5px;
     margin-bottom: 5px;
 }
+
+.ipWidget-SimpleProduct ._price {
+    font-size: 1.5em;
+    font-weight: bold;
+}
