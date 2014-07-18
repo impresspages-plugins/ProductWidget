@@ -102,8 +102,34 @@ class Controller extends \Ip\WidgetController
             $data['imagesBig'][] = ipFileUrl(ipReflection($image, $lightboxOptions));
         }
 
+        $data['widgetId'] = $widgetId;
 
         return parent::generateHtml($revisionId, $widgetId, $data, $skin);
+    }
+
+    /**
+     * Update widget data
+     *
+     * This method is executed each time the widget data is updated.
+     *
+     * @param int $widgetId Widget ID
+     * @param array $postData
+     * @param array $currentData
+     * @return array Data to be stored to the database
+     */
+    public function update($widgetId, $postData, $currentData)
+    {
+        if (is_array($currentData['images'])) {
+            foreach($currentData['images'] as $image) {
+                ipUnbindFile($image, 'ProductWidget', $widgetId);
+            }
+        }
+        if (is_array($postData['images'])) {
+            foreach($postData['images'] as $image) {
+                ipBindFile($image, 'ProductWidget', $widgetId);
+            }
+        }
+        return $postData;
     }
 
 }

@@ -74,7 +74,8 @@ var IpWidget_SimpleProduct = function () {
                 var $popup = $('#ipWidgetSimpleProductPopup .ipsModal');
                 $popup.modal();
                 ipInitForms();
-                $popup.find('.ipsConfirm').on('click', $.proxy(save, context));
+                $popup.find('.ipsConfirm').on('click', function(e){e.preventDefault(); $popup.find('form').submit();});
+                $popup.find('form').off('submit').on('submit', $.proxy(save, context));
             },
             error: function (response) {
                 alert('Error: ' + response.responseText);
@@ -92,7 +93,7 @@ var IpWidget_SimpleProduct = function () {
         var formData = $('#ipWidgetSimpleProductPopup form').serializeArray();
         var data = {};
         $.each(formData, function(key, value) {
-            if ($.inArray(value.name, ['title', 'price', 'currency', 'description']) > -1) {
+            if ($.inArray(value.name, ['title', 'alias', 'price', 'currency', 'requireLogin', 'type', 'description']) > -1) {
                 data[value.name] = value.value;
             }
             if (value.name == 'images[]') {

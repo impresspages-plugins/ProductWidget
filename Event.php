@@ -19,5 +19,6 @@ class Event
     public static function ipBeforeController()
     {
         ipAddCss('assets/productWidget.css');
+        ipAddJs('assets/productWidget.js');
     }
 }

@@ -39,6 +39,15 @@ class AdminController
 
         $form->addField(new \Ip\Form\Field\Text(
                 array(
+                    'name' => 'alias',
+                    'label' => __( 'Alias (unique identificator)', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['alias']) ? null : $widgetData['alias']
+                )
+            )
+        );
+
+        $form->addField(new \Ip\Form\Field\Text(
+                array(
                     'name' => 'price',
                     'label' => __( 'Price', 'SimpleProduct', false ),
                     'value' => empty($widgetData['price']) ? null : $widgetData['price']
