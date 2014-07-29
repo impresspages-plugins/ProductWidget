@@ -11,7 +11,7 @@
  * Time: 11:04 PM
  */
 
-namespace Plugin\ProductWidget\Widget\SimpleProduct;
+namespace Plugin\SimpleProduct\Widget\SimpleProduct;
 
 
 class Controller extends \Ip\WidgetController
@@ -27,7 +27,7 @@ class Controller extends \Ip\WidgetController
      */
     public function getTitle()
     {
-        return __('Product', 'ProductWidget', false);
+        return __('Product', 'SimpleProduct', false);
     }
 
 
@@ -103,6 +103,7 @@ class Controller extends \Ip\WidgetController
         }
 
         $data['widgetId'] = $widgetId;
+        $data['checkoutUrl'] = ipRouteUrl('SimpleProduct_checkout', array('widgetId' => $widgetId));
 
         return parent::generateHtml($revisionId, $widgetId, $data, $skin);
     }
@@ -121,14 +122,27 @@ class Controller extends \Ip\WidgetController
     {
         if (is_array($currentData['images'])) {
             foreach($currentData['images'] as $image) {
-                ipUnbindFile($image, 'ProductWidget', $widgetId);
+                ipUnbindFile($image, 'SimpleProduct', $widgetId);
             }
         }
         if (is_array($postData['images'])) {
             foreach($postData['images'] as $image) {
-                ipBindFile($image, 'ProductWidget', $widgetId);
+                ipBindFile($image, 'SimpleProduct', $widgetId);
             }
         }
+
+        if (is_array($currentData['fileOnSale'])) {
+            foreach($currentData['fileOnSale'] as $file) {
+                ipUnbindFile($file, 'SimpleProduct', $widgetId, 'file/secure/');
+            }
+        }
+        if (is_array($postData['fileOnSale'])) {
+            foreach($postData['fileOnSale'] as $file) {
+                ipBindFile($file, 'SimpleProduct', $widgetId, 'file/secure/');
+            }
+        }
+
+
         return $postData;
     }
 

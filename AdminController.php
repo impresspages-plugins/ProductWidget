@@ -11,11 +11,75 @@
  * Time: 4:25 PM
  */
 
-namespace Plugin\ProductWidget;
+namespace Plugin\SimpleProduct;
 
 
 class AdminController
 {
+
+    /**
+     * @ipSubmenu Orders
+     * @return string
+     */
+    public function index()
+    {
+
+
+
+        return 'test';
+    }
+
+    /**
+     * @ipSubmenu Countries
+     */
+    public function countries()
+    {
+        $config = array(
+            'title' => __('Countries', 'SimpleProduct', false),
+            'table' => 'product_widget_country',
+            'allowSort' => false,
+            'orderBy' => 'priority, title',
+            'fields' => array(
+                array(
+                    'label' => __('Title', 'SimpleProduct', false),
+                    'field' => 'title',
+                    'validators' => array('Required')
+                ),
+                array(
+                    'type' => 'Currency',
+                    'currency' =>  Model::getCurrency(),
+                    'label' => __('Delivery cost', 'SimpleProduct', false),
+                    'field' => 'deliveryCost',
+                    'validators' => array('Required')
+                ),
+                array(
+                    'type' => 'Integer',
+                    'label' => __('Priority (optional)', 'SimpleProduct', false),
+                    'hint' => __('Set priority number to influence default alphabetical order.', 'SimpleProduct', false),
+                    'field' => 'priority'
+                ),
+                array(
+                    'type' => 'Checkbox',
+                    'label' => __('Default', 'SimpleProduct', false),
+                    'hint' => __('Select one country to be the default one.', 'SimpleProduct', false),
+                    'field' => 'isDefault'
+                )
+            )
+        );
+        return ipGridController($config);
+    }
+
+    /**
+     * @ipSubmenu Settings
+     */
+    public function settings()
+    {
+        $url = ipActionUrl(array('aa' => 'Plugins.index'));
+        $url .= '#/hash=&plugin=SimpleProduct';
+        return new \Ip\Response\Redirect($url);
+    }
+
+
     public function widgetPopupForm()
     {
         $widgetId = ipRequest()->getQuery('widgetId');
@@ -23,89 +87,7 @@ class AdminController
         $widgetRecord = \Ip\Internal\Content\Model::getWidgetRecord($widgetId);
         $widgetData = $widgetRecord['data'];
 
-        $form = new \Ip\Form();
-
-        $form->setEnvironment(\Ip\Form::ENVIRONMENT_ADMIN);
-
-
-        $form->addField(new \Ip\Form\Field\Text(
-                array(
-                    'name' => 'title',
-                    'label' => __( 'Title', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['title']) ? null : $widgetData['title']
-                )
-            )
-        );
-
-        $form->addField(new \Ip\Form\Field\Text(
-                array(
-                    'name' => 'alias',
-                    'label' => __( 'Alias (unique identificator)', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['alias']) ? null : $widgetData['alias']
-                )
-            )
-        );
-
-        $form->addField(new \Ip\Form\Field\Text(
-                array(
-                    'name' => 'price',
-                    'label' => __( 'Price', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['price']) ? null : $widgetData['price']
-                )
-            )
-        );
-
-        $form->addField(new \Ip\Form\Field\Text(
-                array(
-                    'name' => 'currency',
-                    'label' => __( 'Currency (eg. USD)', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['currency']) ? null : $widgetData['currency']
-                )
-            )
-        );
-
-        $form->addField(new \Ip\Form\Field\RepositoryFile(
-                array(
-                    'name' => 'images',
-                    'label' => __( 'Images', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['images']) ? null : $widgetData['images']
-                )
-            )
-        );
-
-        $form->addField(new \Ip\Form\Field\RichText(
-                array(
-                    'name' => 'description',
-                    'label' => __( 'Description', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['description']) ? null : $widgetData['description']
-                )
-            )
-        );
-
-        $form->addField(new \Ip\Form\Field\Checkbox(
-                array(
-                    'name' => 'requireLogin',
-                    'label' => __( 'Require user registration', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['requireLogin']) ? null : $widgetData['requireLogin']
-                )
-            )
-        );
-
-        $values = array(
-            array('physical', __('Physical', 'SimpleProduct', false)),
-            array('downloadable', __('Downloadable', 'SimpleProduct', false)),
-            array('virtual', __('Virtual', 'SimpleProduct', false)),
-        );
-        $form->addField(new \Ip\Form\Field\Select(
-                array(
-                    'name' => 'type',
-                    'values' => $values,
-                    'label' => __( 'Product type', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['type']) ? null : $widgetData['type']
-                )
-            )
-        );
-
+        $form = FormHelper::widgetEditForm($widgetData);
 
         $popup = ipView('view/editPopup.php', array('form' => $form))->render();
         $data = array(
@@ -130,12 +112,12 @@ class AdminController
     {
         if (is_array($currentData['images'])) {
             foreach($currentData['images'] as $image) {
-                ipUnbindFile($image, 'ProductWidget', $widgetId);
+                ipUnbindFile($image, 'SimpleProduct', $widgetId);
             }
         }
         if (is_array($postData['images'])) {
             foreach($postData['images'] as $image) {
-                ipBindFile($image, 'ProductWidget', $widgetId);
+                ipBindFile($image, 'SimpleProduct', $widgetId);
             }
         }
         return $postData;

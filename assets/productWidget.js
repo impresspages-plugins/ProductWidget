@@ -1,27 +1,19 @@
 $( document ).ready(function() {
     "use strict";
-    $('.ipWidget-SimpleProduct .ipsBuy').on('click', function (e) {
-        e.preventDefault();
+    $('.ipsPhysicalProductForm .ipsCountry').on('change', function (e) {
 
-        var $buyButton = $(this);
-        var widgetId = $buyButton.data('widgetid');
-        var postData = {
-            'sa': 'ProductWidget.buy',
-            'widgetId': widgetId,
-                'jsonrpc': '2.0'
+        var data = {
+            'sa': 'SimpleProduct.updateDeliveryCost',
+            'country': $(this).val()
         };
 
         $.ajax({
             url: ip.baseUrl,
-            data: postData,
+            data: data,
             dataType: 'json',
             type: 'GET',
             success: function (response) {
-                if (response) {
-                    if (response.redirectUrl) {
-                        document.location = response.redirectUrl;
-                    }
-                }
+                $('.ipsPhysicalProductForm .ipsDeliveryCostHtml').replaceWith(response.html);
             },
             error: function (response) {
                 alert('Unexpected error.' + response.responseText);

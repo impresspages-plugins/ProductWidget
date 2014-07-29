@@ -21,6 +21,6 @@
         <?php if (!empty($price)) { ?>
             <p class="_price"><?php echo ipFormatPrice($price * 100  , $currency, 'SimpleProduct') ?></p>
         <?php } ?>
-        <p><span data-widgetid="<?php echo (int) $widgetId ?>" class="ipsBuy _button button"><?php _e('Buy', 'SimpleProduct') ?></span></p>
+        <p><a href="<?php echo escAttr($checkoutUrl) ?>"><span data-widgetid="<?php echo (int) $widgetId ?>" class="_button button"><?php _e('Buy', 'SimpleProduct') ?></span></a></p>
     </div>
 </div>

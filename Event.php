@@ -11,14 +11,15 @@
  * Time: 10:01 PM
  */
 
-namespace Plugin\ProductWidget;
-
+namespace Plugin\SimpleProduct;
 
 class Event
 {
     public static function ipBeforeController()
     {
-        ipAddCss('assets/productWidget.css');
-        ipAddJs('assets/productWidget.js');
+        ipAddCss('assets/SimpleProduct.css');
+        ipAddJs('assets/SimpleProduct.js');
     }
+
+
 }
