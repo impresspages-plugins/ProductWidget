@@ -139,7 +139,7 @@ class FormHelper
         if (ipUser()->loggedIn()) {
             $defaultData = ipUser()->data();
         }
-        $defaultData = ipFilter('SimpleProduct_downloadablelProductOrderFormDefaults', $defaultData);
+        $defaultData = ipFilter('SimpleProduct_downloadableProductOrderFormDefaults', $defaultData);
 
         $form->addField(new \Ip\Form\Field\Hidden(
                 array(
@@ -189,12 +189,65 @@ class FormHelper
 
         $form->addField(new \Ip\Form\Field\Submit(
                 array(
+                    'name' => 'submit',
                     'value' => __( 'Proceed', 'SimpleProduct', false )
                 )
             )
         );
 
         $form = ipFilter('SimpleProduct_downloadableProductOrderForm', $form);
+        return $form;
+
+    }
+
+    public static function virtualProductOrderForm($widgetId)
+    {
+        $form = new \Ip\Form();
+        $form->setEnvironment(\Ip\Form::ENVIRONMENT_PUBLIC);
+
+        $form->addClass('ipsVirtualProductForm virtualProductForm');
+
+        $defaultData = array();
+        if (ipUser()->loggedIn()) {
+            $defaultData = ipUser()->data();
+        }
+        $defaultData = ipFilter('SimpleProduct_virtualProductOrderFormDefaults', $defaultData);
+
+        $form->addField(new \Ip\Form\Field\Hidden(
+                array(
+                    'name' => 'widgetId',
+                    'value' => $widgetId,
+                    'validators' => array('Required')
+                )
+            )
+        );
+
+        $form->addField(new \Ip\Form\Field\Hidden(
+                array(
+                    'name' => 'sa',
+                    'value' => 'SimpleProduct.pay'
+                )
+            )
+        );
+
+
+        $form->addField(new \Ip\Form\Field\Submit(
+                array(
+                    'name' => 'submit',
+                    'value' => __( 'Proceed', 'SimpleProduct', false )
+                )
+            )
+        );
+
+        $fieldCount = count($form->getFields());
+
+        $form = ipFilter('SimpleProduct_virtualProductOrderForm', $form);
+
+        if ($fieldCount == count($form->getFields())) {
+            //empty form. Autosubmit
+            $form->addClass('ipsProductWidgetAutosubmit');
+        }
+
         return $form;
 
     }
@@ -303,6 +356,7 @@ class FormHelper
 
         $form->addField(new \Ip\Form\Field\Submit(
                 array(
+                    'name' => 'submit',
                     'value' => __( 'Proceed', 'SimpleProduct', false )
                 )
             )

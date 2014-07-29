@@ -132,7 +132,26 @@ class SiteController
 
                 break;
             case 'virtual':
-                return $this->virtualProductOrderForm($widgetId);
+                $form = FormHelper::virtualProductOrderForm($widgetId);
+                $errors = $form->validate(ipRequest()->getPost());
+                if ($errors) {
+                    return new \Ip\Response\Json(array('status' => 'error', 'errors' => $errors));
+                }
+                $orderData = $form->filterValues(ipRequest()->getPost());
+                unset($orderData['securityToken']);
+                unset($orderData['sa']);
+                unset($orderData['antispam']);
+                $orderData['currency'] = Model::getCurrency();
+                $widgetDataKeys = array ('title' => 1, 'alias' => 1, 'type' => 1, 'description' => 1, 'price' => 1);
+                $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
+                $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
+                $orderData['deliveryCost'] = null;
+
+                $orderId = OrderModel::create($orderData);
+                $paymentOptions = array (
+                    ''
+                );
+                ipEcommerce()->paymentUrl($paymentOptions);
                 break;
         }
 
@@ -175,6 +194,15 @@ class SiteController
             'form' => FormHelper::downloadableProductOrderForm($widgetId)
         );
         $pageView = ipView('view/page/physicalProductOrderForm.php', $viewData);
+        return $pageView;
+    }
+
+    protected function virtualProductOrderForm($widgetId)
+    {
+        $viewData = array (
+            'form' => FormHelper::virtualProductOrderForm($widgetId)
+        );
+        $pageView = ipView('view/page/virtualProductOrderForm.php', $viewData);
         return $pageView;
     }
 

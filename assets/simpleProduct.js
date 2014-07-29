@@ -1,5 +1,7 @@
 $( document ).ready(function() {
     "use strict";
+
+    //update delivery price when delivery country changes
     $('.ipsPhysicalProductForm .ipsCountry').on('change', function (e) {
 
         var data = {
@@ -20,4 +22,8 @@ $( document ).ready(function() {
             }
         });
     });
+
+    //autosubmit virtual product checkout form as virtual form has nothing needed to be entered.
+    $('.ipsProductWidgetAutosubmit').submit();
+
 });

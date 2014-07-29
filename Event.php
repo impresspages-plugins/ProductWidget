@@ -17,8 +17,8 @@ class Event
 {
     public static function ipBeforeController()
     {
-        ipAddCss('assets/SimpleProduct.css');
-        ipAddJs('assets/SimpleProduct.js');
+        ipAddCss('assets/simpleProduct.css');
+        ipAddJs('assets/simpleProduct.js');
     }
 
 
