@@ -36,7 +36,7 @@ class AdminController
     {
         $config = array(
             'title' => __('Countries', 'SimpleProduct', false),
-            'table' => 'product_widget_country',
+            'table' => 'simple_product_country',
             'allowSort' => false,
             'orderBy' => 'priority, title',
             'fields' => array(

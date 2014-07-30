@@ -18,6 +18,8 @@ class OrderModel
 {
     public static function create($data)
     {
+
+
         $tableFields = array(
             'title' => 1,
             'alias' => 1,
@@ -41,17 +43,20 @@ class OrderModel
         if (!isset($params['userId']) && ipUser()->loggedIn()) {
             $params['userId'] = ipUser()->userId();
         }
-$data['test'] = 'testValue';
-        $data['test1'] = 'test2Value';
+
         $otherParams = array_diff_key($data, $tableFields);
 
         if (!isset($params['other']) && !empty($otherParams)) {
             $params['other'] = json_encode(self::utf8Encode($otherParams));
         }
 
+        if (empty($params['price'])) {
+           $params['price'] = 0;
+        }
+        $params['price'] = $params['price'] * 100;
 
 
-        $orderId = ipDb()->insert('product_widget_order', $params);
+        $orderId = ipDb()->insert('simple_product_order', $params);
         return $orderId;
     }
 

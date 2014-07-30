@@ -18,13 +18,13 @@ class CountryModel
 {
     public static function getCountryList()
     {
-        $countries = ipDb()->selectColumn('product_widget_country', 'title', null, ' ORDER BY `priority` desc, `title` asc');
+        $countries = ipDb()->selectColumn('simple_product_country', 'title', null, ' ORDER BY `priority` desc, `title` asc');
         return $countries;
     }
 
     public static function getDefaultCountry()
     {
-        $defaultCountry = ipDb()->selectRow('product_widget_country', '*', array('isDefault' => 1), '  ORDER BY `priority` desc, `title` asc');
+        $defaultCountry = ipDb()->selectRow('simple_product_country', '*', array('isDefault' => 1), '  ORDER BY `priority` desc, `title` asc');
         if (!$defaultCountry) {
             $defaultCountry = array_shift(self::getCountryList());
         }
@@ -33,7 +33,7 @@ class CountryModel
 
     public static function getCountryByTitle($title)
     {
-        $country = ipDb()->selectRow('product_widget_country', '*', array('title' => $title), '  ORDER BY `priority` desc, `title` asc');
+        $country = ipDb()->selectRow('simple_product_country', '*', array('title' => $title), '  ORDER BY `priority` desc, `title` asc');
         return $country;
     }
 }
