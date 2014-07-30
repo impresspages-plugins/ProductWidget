@@ -150,12 +150,13 @@ class SiteController
                 $orderId = OrderModel::create($orderData);
                 $paymentOptions = array (
                     'item' => $orderData['title'],
-                    'price' => $orderData['price'],
+                    'price' => $orderData['price'] * 100,
                     'currency' => $orderData['currency']
                 );
+                $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
                 return new \Ip\Response\Json(array(
                     'status' => 'success',
-                    'redirectUrl' => ipEcommerce()->paymentUrl($paymentOptions)
+                    'redirectUrl' => $paymentUrl
                 ));
                 break;
         }
