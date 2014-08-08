@@ -23,10 +23,12 @@ class AdminController
      */
     public function index()
     {
-
-
-
-        return 'test';
+        $config = array(
+            'title' => __('Orders', 'SimpleProduct', false),
+            'table' => 'simple_product_order',
+            'orderBy' => 'id desc'
+        );
+        return ipGridController($config);
     }
 
     /**
