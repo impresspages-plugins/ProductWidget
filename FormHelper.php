@@ -123,7 +123,14 @@ class FormHelper
         );
 
 
-
+        $form->addField(new \Ip\Form\Field\Url(
+                array(
+                    'name' => 'successUrl',
+                    'label' => __( 'Page after successful payment', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['successUrl']) ? null : $widgetData['successUrl']
+                )
+            )
+        );
 
         return $form;
     }
