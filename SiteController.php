@@ -149,13 +149,14 @@ class SiteController
 
                 $orderId = OrderModel::create($orderData);
                 $order = OrderModel::get($orderId);
+
+
                 $paymentOptions = array (
                     'id' => $orderId,
                     'title' => $orderData['title'],
                     'price' => $orderData['price'] * 100,
                     'currency' => $orderData['currency'],
                     'successUrl' => ipRouteUrl('SimpleProduct_completed', array('orderId' => $orderId, 'securityCode' => $order['securityCode'])),
-                    'cancelUrl' => ipRouteUrl('SimpleProduct_canceled', array('orderId' => $orderId, 'securityCode' => $order['securityCode']))
                 );
                 $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
                 return new \Ip\Response\Json(array(
