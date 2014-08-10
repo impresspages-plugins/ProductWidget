@@ -112,7 +112,7 @@ var IpWidget_SimpleProduct = function () {
         var formData = $('#ipWidgetSimpleProductPopup form').serializeArray();
         var data = {};
         $.each(formData, function (key, value) {
-            if ($.inArray(value.name, ['title', 'alias', 'price', 'currency', 'requireLogin', 'type', 'fileOnSaleName', 'description', 'successUrl']) > -1) {
+            if ($.inArray(value.name, ['title', 'alias', 'price', 'requireLogin', 'type', 'fileOnSaleName', 'description', 'successUrl']) > -1) {
                 data[value.name] = value.value;
             }
             if (value.name === 'images[]') {

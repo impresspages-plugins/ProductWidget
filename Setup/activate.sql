@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS `ip_simple_product_order` (
   `title` varchar(255) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
+  `fileOnSale` VARCHAR(255) NULL,
+  `fileOnSaleName` VARCHAR(255) NULL,
   `description` text NOT NULL,
   `price` varchar(255) NOT NULL,
   `currency` varchar(255) NOT NULL,

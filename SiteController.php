@@ -111,9 +111,12 @@ class SiteController
                 unset($orderData['sa']);
                 unset($orderData['antispam']);
                 $orderData['currency'] = Model::getCurrency();
-                $widgetDataKeys = array ('title' => 1, 'alias' => 1, 'type' => 1, 'description' => 1, 'price' => 1);
+                $widgetDataKeys = array ('title' => 1, 'fileOnSaleName' => 1, 'alias' => 1, 'type' => 1, 'description' => 1, 'price' => 1);
                 $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
                 $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
+                if (!empty($widgetData['fileOnSale'][0])) {
+                    $orderData['fileOnSale'] = $widgetData['fileOnSale'][0];
+                }
                 $orderData['deliveryCost'] = null;
                 break;
             case 'virtual':
@@ -168,16 +171,25 @@ class SiteController
             throw new \Ip\Exception('Incorrect security code');
         }
 
-        $file = ipFile('secure/' . $order['fileOnSale']);
+        $file = ipFile('file/secure/' . $order['fileOnSale']);
 
-        if (strpos(realpath($file), realpath(ipFile('secure/'))) !== 0) {
+        if (strpos(realpath($file), realpath(ipFile('file/secure/'))) !== 0) {
             throw new \Ip\Exception("Trying to access file outside of secure dir.");
         }
 
         $requiredName = basename($file);
         if (!empty($order['fileOnSaleName'])) {
             $requiredName = $order['fileOnSaleName'];
+            if (strpos($requiredName, '.') === false) {
+                $originalName = basename($file);
+                if (strpos($originalName, '.') !== false) {
+                    $extension = substr($originalName, strpos($originalName, '.'));
+                    $requiredName .= $extension;
+                }
+            }
         }
+
+
 
         // get mime type
         $mtype = "application/force-download";

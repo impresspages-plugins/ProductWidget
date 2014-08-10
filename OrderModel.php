@@ -24,6 +24,8 @@ class OrderModel
             'title' => 1,
             'alias' => 1,
             'type' => 1,
+            'fileOnSale' => 1,
+            'fileOnSaleName' => 1,
             'description' => 1,
             'price' => 1,
             'currency' => 1,

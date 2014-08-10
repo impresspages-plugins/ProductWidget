@@ -44,20 +44,13 @@ class FormHelper
         $form->addField(new \Ip\Form\Field\Currency(
                 array(
                     'name' => 'price',
-                    'label' => __( 'Price', 'SimpleProduct', false ),
+                    'label' => __( 'Price', 'SimpleProduct', false ) . ' (' . Model::getCurrency() . ')',
                     'value' => empty($widgetData['price']) ? null : $widgetData['price']
                 )
             )
         );
 
-        $form->addField(new \Ip\Form\Field\Text(
-                array(
-                    'name' => 'currency',
-                    'label' => __( 'Currency (eg. USD)', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['currency']) ? null : $widgetData['currency']
-                )
-            )
-        );
+        //TODOX restore currency per widget setting
 
         $form->addField(new \Ip\Form\Field\RepositoryFile(
                 array(
