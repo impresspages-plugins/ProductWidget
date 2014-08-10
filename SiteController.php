@@ -99,14 +99,6 @@ class SiteController
                     throw new \Ip\Exception('Country not found');
                 }
                 $orderData['deliveryCost'] = $country['deliveryCost'];
-
-                $orderId = OrderModel::create($orderData);
-                $paymentOptions = array (
-                    ''
-                );
-                ipEcommerce()->paymentUrl($paymentOptions);
-
-
                 break;
             case 'downloadable':
                 $form = FormHelper::downloadableProductOrderForm($widgetId);
@@ -123,13 +115,6 @@ class SiteController
                 $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
                 $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
                 $orderData['deliveryCost'] = null;
-
-                $orderId = OrderModel::create($orderData);
-                $paymentOptions = array (
-                    ''
-                );
-                ipEcommerce()->paymentUrl($paymentOptions);
-
                 break;
             case 'virtual':
                 $form = FormHelper::virtualProductOrderForm($widgetId);
@@ -146,30 +131,30 @@ class SiteController
                 $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
                 $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
                 $orderData['deliveryCost'] = null;
-
-                $orderId = OrderModel::create($orderData);
-                $order = OrderModel::get($orderId);
-
-                if (!empty($widgetData['successUrl'])) {
-                    $successUrl = $widgetData['successUrl'];
-                } else {
-                    $successUrl = ipRouteUrl('SimpleProduct_completed', array('orderId' => $orderId, 'securityCode' => $order['securityCode']));
-                }
-
-                $paymentOptions = array (
-                    'id' => $orderId,
-                    'title' => $orderData['title'],
-                    'price' => $orderData['price'] * 100,
-                    'currency' => $orderData['currency'],
-                    'successUrl' => $successUrl,
-                );
-                $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
-                return new \Ip\Response\Json(array(
-                    'status' => 'success',
-                    'redirectUrl' => $paymentUrl
-                ));
                 break;
         }
+        $orderId = OrderModel::create($orderData);
+        $order = OrderModel::get($orderId);
+
+
+        if (!empty($widgetData['successUrl'])) {
+            $successUrl = $widgetData['successUrl'];
+        } else {
+            $successUrl = ipRouteUrl('SimpleProduct_completed', array('orderId' => $orderId, 'securityCode' => $order['securityCode']));
+        }
+
+        $paymentOptions = array (
+            'id' => $orderId,
+            'title' => $orderData['title'],
+            'price' => $orderData['price'] * 100,
+            'currency' => $orderData['currency'],
+            'successUrl' => $successUrl,
+        );
+        $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
+        return new \Ip\Response\Json(array(
+                'status' => 'success',
+                'redirectUrl' => $paymentUrl
+            ));
 
     }
 
@@ -183,7 +168,31 @@ class SiteController
             throw new \Ip\Exception('Incorrect security code');
         }
 
+        $response = '';
+        switch($order['type']) {
+            case 'virtual':
+                $data = array(
+                    'order' => $order
+                );
+                $response = ipView('view/page/virtualProductPurchased.php', $data);
+                break;
+            case 'physical':
+                $data = array(
+                    'order' => $order
+                );
+                $response = ipView('view/page/physicalProductPurchased.php', $data);
+                break;
+            case 'downloadable':
+                $data = array(
+                    'order' => $order
+                );
+                $response = ipView('view/page/downloadableProductPurchased.php', $data);
+                break;
+        }
 
+        $response = ipFilter('SimpleProduct_successfulPurchasePageResponse', $response, array('order' => $order));
+
+        return $response;
     }
 
     public function canceled($orderId, $securityCode)

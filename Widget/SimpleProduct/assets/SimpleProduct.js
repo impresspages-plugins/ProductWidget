@@ -4,7 +4,7 @@
  */
 
 var IpWidget_SimpleProduct = function () {
-
+    "use strict";
     this.widgetObject = null;
     this.confirmButton = null;
     this.data = {};
@@ -45,7 +45,7 @@ var IpWidget_SimpleProduct = function () {
             .css('z-index', 1000) // should be higher enough but lower than widget controls
             .width(this.widgetObject.width())
             .height(this.widgetObject.height());
-    }
+    };
 
 
     this.onAdd = function () {
@@ -74,8 +74,8 @@ var IpWidget_SimpleProduct = function () {
                 var $popup = $('#ipWidgetSimpleProductPopup .ipsModal');
                 $popup.modal();
                 ipInitForms();
-                $popup.find('.ipsConfirm').on('click', function(e){e.preventDefault(); $popup.find('form').submit();});
-                $popup.find('form').off('submit').on('submit', $.proxy(save, context));
+                $popup.find('.ipsConfirm').on('click', function (e) {e.preventDefault(); $popup.find('form').submit();});
+                $popup.find('form').off('submit').on('submit', function (e) {e.preventDefault(); $.proxy(save, context)();});
 
                 $.proxy(showHideTypeSpecificFields, context)();
                 $popup.find('.name-type select').on('change', $.proxy(showHideTypeSpecificFields, context));
@@ -91,8 +91,7 @@ var IpWidget_SimpleProduct = function () {
 
     };
 
-    var showHideTypeSpecificFields = function()
-    {
+    var showHideTypeSpecificFields = function () {
         var $popup = $('#ipWidgetSimpleProductPopup .ipsModal');
         var $select = $popup.find('.name-type select');
         $popup.find('.name-deliveryRates').addClass('hidden');
@@ -108,25 +107,23 @@ var IpWidget_SimpleProduct = function () {
     };
 
     var save = function () {
-
-
         var formData = $('#ipWidgetSimpleProductPopup form').serializeArray();
         var data = {};
-        $.each(formData, function(key, value) {
+        $.each(formData, function (key, value) {
             if ($.inArray(value.name, ['title', 'alias', 'price', 'currency', 'requireLogin', 'type', 'description', 'successUrl']) > -1) {
                 data[value.name] = value.value;
             }
-            if (value.name == 'images[]') {
-                if (!data['images']) {
-                    data['images'] = [];
+            if (value.name === 'images[]') {
+                if (!data.images) {
+                    data.images = [];
                 }
                 data['images'].push(value.value);
             }
-            if (value.name == 'fileOnSale[]') {
-                if (!data['fileOnSale']) {
-                    data['fileOnSale'] = [];
+            if (value.name === 'fileOnSale[]') {
+                if (!data.fileOnSale) {
+                    data.fileOnSale = [];
                 }
-                data['fileOnSale'].push(value.value);
+                data.fileOnSale.push(value.value);
             }
         });
 

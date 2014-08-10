@@ -60,6 +60,11 @@ class OrderModel
             $params['securityCode'] = self::randomString(32);
         }
 
+        if (empty($params['createdAt'])) {
+            $params['createdAt'] = date('Y-m-d H:i:s');
+        }
+
+
 
         $orderId = ipDb()->insert('simple_product_order', $params);
         return $orderId;

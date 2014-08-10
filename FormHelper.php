@@ -127,7 +127,8 @@ class FormHelper
                 array(
                     'name' => 'successUrl',
                     'label' => __( 'Page after successful payment', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['successUrl']) ? null : $widgetData['successUrl']
+                    'value' => empty($widgetData['successUrl']) ? null : $widgetData['successUrl'],
+                    'note' => __( 'Leave empty for default', 'SimpleProduct', false ),
                 )
             )
         );

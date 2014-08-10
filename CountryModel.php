@@ -26,7 +26,8 @@ class CountryModel
     {
         $defaultCountry = ipDb()->selectRow('simple_product_country', '*', array('isDefault' => 1), '  ORDER BY `priority` desc, `title` asc');
         if (!$defaultCountry) {
-            $defaultCountry = array_shift(self::getCountryList());
+            $countryList = self::getCountryList();
+            $defaultCountry = self::getCountryByTitle(array_shift($countryList));
         }
         return $defaultCountry;
     }
