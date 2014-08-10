@@ -158,6 +158,18 @@ class SiteController
 
     }
 
+    public function download($orderId, $securityCode)
+    {
+        $order = OrderModel::get($orderId);
+        if (!$order) {
+            throw new \Ip\Exception('Order doesn\'t exist.');
+        }
+        if ($order['securityCode'] != $securityCode) {
+            throw new \Ip\Exception('Incorrect security code');
+        }
+
+    }
+
     public function completed($orderId, $securityCode)
     {
         $order = OrderModel::get($orderId);
@@ -183,8 +195,10 @@ class SiteController
                 $response = ipView('view/page/physicalProductPurchased.php', $data);
                 break;
             case 'downloadable':
+                $downloadUrl = ipRouteUrl('SimpleProduct_download', array('orderId' => $orderId, 'securityCode' => $securityCode));
                 $data = array(
-                    'order' => $order
+                    'order' => $order,
+                    'downloadUrl' => $downloadUrl
                 );
                 $response = ipView('view/page/downloadableProductPurchased.php', $data);
                 break;

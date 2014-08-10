@@ -8,7 +8,7 @@
         <td><?php echo esc($order['title']) ?></td>
     </tr>
     <tr>
-        <td><b><?php echo __('Amount', 'PayPal') ?></b></td>
+        <td><b><?php echo __('Price', 'PayPal') ?></b></td>
         <td><?php echo esc(ipFormatPrice($order['price'], $order['currency'], 'PayPal')) ?></td>
     </tr>
     <tr>
