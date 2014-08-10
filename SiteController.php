@@ -168,6 +168,47 @@ class SiteController
             throw new \Ip\Exception('Incorrect security code');
         }
 
+        $file = ipFile('secure/' . $order['fileOnSale']);
+
+        if (strpos(realpath($file), realpath(ipFile('secure/'))) !== 0) {
+            throw new \Ip\Exception("Trying to access file outside of secure dir.");
+        }
+
+        $requiredName = basename($file);
+        if (!empty($order['fileOnSaleName'])) {
+            $requiredName = $order['fileOnSaleName'];
+        }
+
+        // get mime type
+        $mtype = "application/force-download";
+
+        $fsize = filesize($file);
+        // set headers
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Type: $mtype");
+        header("Content-Disposition: attachment; filename=\"" . escAttr($requiredName) . "\"");
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Length: " . $fsize);
+
+        // download
+        // @readfile($file_path);
+        $file = @fopen($file, "rb");
+        if ($file) {
+            while (!feof($file)) {
+                print(fread($file, 1024 * 8));
+                flush();
+                if (connection_status() != 0) {
+                    @fclose($file);
+                    die();
+                }
+            }
+            @fclose($file);
+        }
+        return false;
     }
 
     public function completed($orderId, $securityCode)

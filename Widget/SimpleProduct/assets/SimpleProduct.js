@@ -96,12 +96,14 @@ var IpWidget_SimpleProduct = function () {
         var $select = $popup.find('.name-type select');
         $popup.find('.name-deliveryRates').addClass('hidden');
         $popup.find('.name-fileOnSale').addClass('hidden');
+        $popup.find('.name-fileOnSaleName').addClass('hidden');
 
         if ($select.val() === 'physical') {
             $popup.find('.name-deliveryRates').removeClass('hidden');
         }
         if ($select.val() === 'downloadable') {
             $popup.find('.name-fileOnSale').removeClass('hidden');
+            $popup.find('.name-fileOnSaleName').removeClass('hidden');
         }
 
     };
@@ -110,7 +112,7 @@ var IpWidget_SimpleProduct = function () {
         var formData = $('#ipWidgetSimpleProductPopup form').serializeArray();
         var data = {};
         $.each(formData, function (key, value) {
-            if ($.inArray(value.name, ['title', 'alias', 'price', 'currency', 'requireLogin', 'type', 'description', 'successUrl']) > -1) {
+            if ($.inArray(value.name, ['title', 'alias', 'price', 'currency', 'requireLogin', 'type', 'fileOnSaleName', 'description', 'successUrl']) > -1) {
                 data[value.name] = value.value;
             }
             if (value.name === 'images[]') {

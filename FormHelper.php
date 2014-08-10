@@ -86,6 +86,18 @@ class FormHelper
             )
         );
 
+
+
+        $form->addField(new \Ip\Form\Field\Url(
+                array(
+                    'name' => 'successUrl',
+                    'label' => __( 'Page after successful payment', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['successUrl']) ? null : $widgetData['successUrl'],
+                    'note' => __( 'Leave empty for default', 'SimpleProduct', false ),
+                )
+            )
+        );
+
         $values = array(
             array('physical', __('Physical', 'SimpleProduct', false)),
             array('downloadable', __('Downloadable', 'SimpleProduct', false)),
@@ -122,16 +134,16 @@ class FormHelper
             )
         );
 
-
-        $form->addField(new \Ip\Form\Field\Url(
+        $form->addField(new \Ip\Form\Field\Text(
                 array(
-                    'name' => 'successUrl',
-                    'label' => __( 'Page after successful payment', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['successUrl']) ? null : $widgetData['successUrl'],
-                    'note' => __( 'Leave empty for default', 'SimpleProduct', false ),
+                    'name' => 'fileOnSaleName',
+                    'label' => __( 'File name while downloading', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['fileOnSaleName']) ? null : $widgetData['fileOnSaleName'],
+                    'note' => __('Leave empty to use the same name as you have uploaded', 'SimpleProduct', false)
                 )
             )
         );
+
 
         return $form;
     }
