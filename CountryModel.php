@@ -37,4 +37,7 @@ class CountryModel
         $country = ipDb()->selectRow('simple_product_country', '*', array('title' => $title), '  ORDER BY `priority` desc, `title` asc');
         return $country;
     }
+
+
+
 }

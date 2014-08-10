@@ -43,8 +43,9 @@ class AdminController
         $config = array(
             'title' => __('Countries', 'SimpleProduct', false),
             'table' => 'simple_product_country',
-            'allowSort' => false,
+            'sortField' => 'priority',
             'orderBy' => 'priority, title',
+            'preventAction' => 'Plugin\SimpleProduct\CountryHelper::preventAction',
             'fields' => array(
                 array(
                     'label' => __('Title', 'SimpleProduct', false),
@@ -53,7 +54,7 @@ class AdminController
                 ),
                 array(
                     'type' => 'Currency',
-                    'currency' =>  Model::getCurrency(),
+                    'currency' => Model::getCurrency(),
                     'label' => __('Delivery cost', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
                     'field' => 'deliveryCost',
                     'validators' => array('Required')
@@ -61,7 +62,11 @@ class AdminController
                 array(
                     'type' => 'Integer',
                     'label' => __('Priority (optional)', 'SimpleProduct', false),
-                    'hint' => __('Set priority number to influence default alphabetical order.', 'SimpleProduct', false),
+                    'hint' => __(
+                        'Set priority number to influence default alphabetical order.',
+                        'SimpleProduct',
+                        false
+                    ),
                     'field' => 'priority'
                 ),
                 array(
@@ -78,14 +83,54 @@ class AdminController
     }
 
     /**
-     * @ipSubmenu Settings
+     * @ipSubmenu Currencies
      */
-    public function settings()
+    public function currencies()
     {
-        $url = ipActionUrl(array('aa' => 'Plugins.index'));
-        $url .= '#/hash=&plugin=SimpleProduct';
-        return new \Ip\Response\Redirect($url);
+        $config = array(
+            'title' => __('Countries', 'SimpleProduct', false),
+            'table' => 'simple_product_currency',
+            'sortField' => 'priority',
+            'createPosition' => 'bottom',
+            'fields' => array(
+                array(
+                    'label' => __('Currency', 'SimpleProduct', false),
+                    'field' => 'currency',
+                    'transformations' => array('Trim', 'UpperCase'),
+                    'validators' => array(
+                        'Required',
+                        array('Regex', '/^[A-Z][A-Z][A-Z]$/', __('Please use three uppercase letter abbreviation. Eg. USD', 'SimpleProduct', false))
+                    )
+                ),
+                array(
+                    'label' => __('Ratio', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
+                    'field' => 'ratio',
+                    'transformations' => array('Trim'),
+                    'validators' => array(
+                        'Required',
+                        array('Regex', '/^[0-9]+(\.[0-9]+)?$/', __('Incorrect value. Eg. value 1.123', 'SimpleProduct', false)),
+                        array('NotInArray', array('0'))
+                    )
+                )
+
+            )
+        );
+        $config = ipFilter('SimpleProduct_countriesGridConfig', $config);
+
+        return ipGridController($config);
     }
+
+    //TODOX remove if unused
+//    /**
+//     * @ipSubmenu Settings
+//     */
+//    public function settings()
+//    {
+//        $url = ipActionUrl(array('aa' => 'Plugins.index', 'disableAdminNavbar' => 1));
+//        $url .= '#/hash=&plugin=SimpleProduct';
+//        //return new \Ip\Response\Redirect($url);
+//        return '<iframe style="margin-left: -300px; width: 600px; height: 300px;" src="' . $url . '"></iframe>';
+//    }
 
 
     public function widgetPopupForm()
@@ -130,4 +175,7 @@ class AdminController
         }
         return $postData;
     }
+
+
+
 }
