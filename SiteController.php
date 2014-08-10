@@ -150,13 +150,18 @@ class SiteController
                 $orderId = OrderModel::create($orderData);
                 $order = OrderModel::get($orderId);
 
+                if (!empty($widgetData['successUrl'])) {
+                    $successUrl = $widgetData['successUrl'];
+                } else {
+                    $successUrl = ipRouteUrl('SimpleProduct_completed', array('orderId' => $orderId, 'securityCode' => $order['securityCode']));
+                }
 
                 $paymentOptions = array (
                     'id' => $orderId,
                     'title' => $orderData['title'],
                     'price' => $orderData['price'] * 100,
                     'currency' => $orderData['currency'],
-                    'successUrl' => ipRouteUrl('SimpleProduct_completed', array('orderId' => $orderId, 'securityCode' => $order['securityCode'])),
+                    'successUrl' => $successUrl,
                 );
                 $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
                 return new \Ip\Response\Json(array(
