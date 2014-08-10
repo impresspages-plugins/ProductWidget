@@ -148,10 +148,14 @@ class SiteController
                 $orderData['deliveryCost'] = null;
 
                 $orderId = OrderModel::create($orderData);
+                $order = OrderModel::get($orderId);
                 $paymentOptions = array (
-                    'item' => $orderData['title'],
+                    'id' => $orderId,
+                    'title' => $orderData['title'],
                     'price' => $orderData['price'] * 100,
-                    'currency' => $orderData['currency']
+                    'currency' => $orderData['currency'],
+                    'successUrl' => ipRouteUrl('SimpleProduct_completed', array('orderId' => $orderId, 'securityCode' => $order['securityCode'])),
+                    'cancelUrl' => ipRouteUrl('SimpleProduct_canceled', array('orderId' => $orderId, 'securityCode' => $order['securityCode']))
                 );
                 $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
                 return new \Ip\Response\Json(array(
@@ -159,6 +163,31 @@ class SiteController
                     'redirectUrl' => $paymentUrl
                 ));
                 break;
+        }
+
+    }
+
+    public function completed($orderId, $securityCode)
+    {
+        $order = OrderModel::get($orderId);
+        if (!$order) {
+            throw new \Ip\Exception('Order doesn\'t exist.');
+        }
+        if ($order['securityCode'] != $securityCode) {
+            throw new \Ip\Exception('Incorrect security code');
+        }
+
+
+    }
+
+    public function canceled($orderId, $securityCode)
+    {
+        $order = OrderModel::get($orderId);
+        if (!$order) {
+            throw new \Ip\Exception('Order doesn\'t exist.');
+        }
+        if ($order['securityCode'] != $securityCode) {
+            throw new \Ip\Exception('Incorrect security code');
         }
 
     }

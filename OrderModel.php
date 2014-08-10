@@ -35,7 +35,8 @@ class OrderModel
             'deliveryCost' => 1,
             'country' => 1,
             'widgetId' => 1,
-            'other' => 1
+            'other' => 1,
+            'securityCode' => 1
         );
 
         $params = array_intersect_key($data, $tableFields);
@@ -55,10 +56,22 @@ class OrderModel
         }
         $params['price'] = $params['price'] * 100;
 
+        if (empty($params['securityCode'])) {
+            $params['securityCode'] = self::randomString(32);
+        }
+
 
         $orderId = ipDb()->insert('simple_product_order', $params);
         return $orderId;
     }
+
+    public static function get($orderId)
+    {
+
+        $order = ipDb()->selectRow('simple_product_order', '*', array('id' => $orderId));
+        return $order;
+    }
+
 
     /**
      * Returns $dat encoded to UTF8
@@ -82,6 +95,11 @@ class OrderModel
             return $answer;
         }
         return $dat;
+    }
+
+    protected static function randomString($length)
+    {
+        return substr(sha1(rand()), 0, $length);
     }
 
 }

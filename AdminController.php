@@ -26,8 +26,12 @@ class AdminController
         $config = array(
             'title' => __('Orders', 'SimpleProduct', false),
             'table' => 'simple_product_order',
-            'orderBy' => 'id desc'
+            'orderBy' => 'id desc',
+            'allowCreate' => false
         );
+
+        $config = ipFilter('SimpleProduct_orderGridConfig', $config);
+
         return ipGridController($config);
     }
 
@@ -50,7 +54,7 @@ class AdminController
                 array(
                     'type' => 'Currency',
                     'currency' =>  Model::getCurrency(),
-                    'label' => __('Delivery cost', 'SimpleProduct', false),
+                    'label' => __('Delivery cost', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
                     'field' => 'deliveryCost',
                     'validators' => array('Required')
                 ),
@@ -68,6 +72,8 @@ class AdminController
                 )
             )
         );
+        $config = ipFilter('SimpleProduct_countriesGridConfig', $config);
+
         return ipGridController($config);
     }
 
