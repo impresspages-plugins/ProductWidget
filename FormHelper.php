@@ -44,13 +44,22 @@ class FormHelper
         $form->addField(new \Ip\Form\Field\Currency(
                 array(
                     'name' => 'price',
-                    'label' => __( 'Price', 'SimpleProduct', false ) . ' (' . Model::getCurrency() . ')',
-                    'value' => empty($widgetData['price']) ? null : $widgetData['price']
+                    'label' => __( 'Price', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['price']) ? null : $widgetData['price'],
+                    'validators' => array('Required', array('Regex', '/^[A-Z][A-Z][A-Z]$/'))
                 )
             )
         );
 
-        //TODOX restore currency per widget setting
+        $form->addField(new \Ip\Form\Field\Text(
+                array(
+                    'name' => 'currency',
+                    'label' => __( 'Currency', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['currency']) ? null : $widgetData['currency'],
+                    'hint' => __('Three uppercase letter code. Eg. USD', 'SimpleProduct', false)
+                )
+            )
+        );
 
         $form->addField(new \Ip\Form\Field\RepositoryFile(
                 array(
@@ -267,6 +276,11 @@ class FormHelper
 
     public static function physicalProductOrderForm($widgetId)
     {
+        $widget = \Ip\Internal\Content\Model::getWidgetRecord($widgetId);
+        $widgetData = $widget['data'];
+
+
+
         $form = new \Ip\Form();
 
         $form->setEnvironment(\Ip\Form::ENVIRONMENT_PUBLIC);
@@ -356,11 +370,13 @@ class FormHelper
         );
 
         $defaultCountry = CountryModel::getDefaultCountry();
+        $orderCurrency = $widgetData['currency'];
+        $deliveryPrice = ipConvertCurrency($defaultCountry['deliveryCost'], $defaultCountry['currency'], $orderCurrency);
         $form->addField(new \Ip\Form\Field\Info(
                 array(
                     'name' => 'cost',
                     'label' => __( 'Delivery price', 'SimpleProduct', false ),
-                    'html' => ipView('view/costField.php', array('cost' => $defaultCountry['deliveryCost'] * 100, 'currency' => Model::getCurrency())),
+                    'html' => ipView('view/costField.php', array('cost' => $deliveryPrice, 'currency' => $orderCurrency)),
                 )
             )
         );

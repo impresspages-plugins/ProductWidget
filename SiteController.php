@@ -278,13 +278,23 @@ class SiteController
     public function updateDeliveryCost()
     {
         $countryTitle = ipRequest()->getQuery('country');
+        $widgetId = ipRequest()->getQuery('widgetId');
+        $widgetRecord = \Ip\Internal\Content\Model::getWidgetRecord($widgetId);
+        $widgetData = $widgetRecord['data'];
+
+        if (empty($widgetData['currency'])) {
+            throw new \Ip\Exception('Widget\'s currency is not defined');
+        }
+
+        $orderCurrency = $widgetData['currency'];
+
         $country = CountryModel::getCountryByTitle($countryTitle);
         if (!$country) {
             throw new \Ip\Exception('Country doesn\'t exist: ' . $countryTitle);
         }
         $viewData = array(
-            'cost' => $country['deliveryCost'],
-            'currency' => Model::getCurrency()
+            'cost' => ipConvertCurrency($country['deliveryCost'], $country['currency'], $orderCurrency),
+            'currency' => $orderCurrency
         );
         $html = ipView('view/costField.php', $viewData)->render();
         $response = array(

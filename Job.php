@@ -16,12 +16,15 @@ namespace Plugin\SimpleProduct;
 
 class Job
 {
-    public static function ipConvertCurrency($amount, $sourceCurrency, $destinationCurrency)
+    public static function ipConvertCurrency($data)
     {
+        $amount = $data['amount'];
+        $sourceCurrency = $data['sourceCurrency'];
+        $destinationCurrency = $data['destinationCurrency'];
         $sourceRate = CurrencyModel::getCurrencyRate($sourceCurrency);
         $destinationRate = CurrencyModel::getCurrencyRate($destinationCurrency);
         if ($sourceRate !== null && $destinationRate !== null) {
-            $newAmount = $amount / $sourceRate * $destinationRate;
+            $newAmount = $amount / $destinationRate * $sourceRate;
             return $newAmount;
         }
     }

@@ -54,13 +54,13 @@ class AdminController
                 ),
                 array(
                     'type' => 'Currency',
-                    'currency' => Model::getCurrency(),
-                    'label' => __('Delivery cost', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
+                    'currencyField' => 'currency',
+                    'label' => __('Delivery cost', 'SimpleProduct', false),
                     'field' => 'deliveryCost',
                     'validators' => array('Required')
                 ),
                 array(
-                    'label' => __('Currency', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
+                    'label' => __('Delivery currency', 'SimpleProduct', false),
                     'field' => 'currency',
                     'transformations' => array('Trim', 'UpperCase'),
                     'validators' => array('Required', array('Regex', '/^[A-Z][A-Z][A-Z]$/'))
@@ -117,7 +117,7 @@ class AdminController
                         array('Regex', '/^[0-9]+(\.[0-9]+)?$/', __('Incorrect value. Eg. value 1.123', 'SimpleProduct', false)),
                         array('NotInArray', array('0'))
                     ),
-                    'note' => __('Rate when converting from / to this currency. Calculations are done this way: currency1 / ratio1 = currency2 / ratio2. We suggest to set your main currency ratio to 1 to ease the calculations.', 'SimpleProduct', false)
+                    'note' => __('Rate when converting from / to this currency. Calculations are done this way: currency1amount * ratio1 = amount2amount * ratio2. We suggest to set your main currency ratio to 1 to ease the calculations.', 'SimpleProduct', false)
                 )
 
             )

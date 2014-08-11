@@ -6,7 +6,8 @@ $( document ).ready(function() {
 
         var data = {
             'sa': 'SimpleProduct.updateDeliveryCost',
-            'country': $(this).val()
+            'country': $(this).val(),
+            'widgetId': $(this).closest('form').find('input[name=widgetId]').val()
         };
 
         $.ajax({
