@@ -25,8 +25,8 @@ class CurrencyModel
 
     public static function getCurrencyRate($currency)
     {
-        $ratio = ipDb()->selectValue('simple_product_currency', 'ratio', array('currency' => $currency));
-        return $ratio;
+        $rate = ipDb()->selectValue('simple_product_currency', 'rate', array('currency' => $currency));
+        return $rate;
     }
 
 

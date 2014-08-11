@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `ip_simple_product_country` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `deliveryCost` int(11) NOT NULL COMMENT 'in cents',
+  `currency` varchar(3) NOT NULL,
   `priority` DOUBLE NOT NULL,
   `isDefault` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)

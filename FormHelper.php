@@ -73,7 +73,7 @@ class FormHelper
         $form->addField(new \Ip\Form\Field\Checkbox(
                 array(
                     'name' => 'requireLogin',
-                    'label' => __( 'Require user registration', 'SimpleProduct', false ),
+                    'label' => __( 'Require user registlration', 'SimpleProduct', false ),
                     'value' => empty($widgetData['requireLogin']) ? null : $widgetData['requireLogin']
                 )
             )

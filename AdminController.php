@@ -60,6 +60,12 @@ class AdminController
                     'validators' => array('Required')
                 ),
                 array(
+                    'label' => __('Currency', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
+                    'field' => 'currency',
+                    'transformations' => array('Trim', 'UpperCase'),
+                    'validators' => array('Required', array('Regex', '/^[A-Z][A-Z][A-Z]$/'))
+                ),
+                array(
                     'type' => 'Integer',
                     'label' => __('Priority (optional)', 'SimpleProduct', false),
                     'hint' => __(
@@ -88,7 +94,7 @@ class AdminController
     public function currencies()
     {
         $config = array(
-            'title' => __('Countries', 'SimpleProduct', false),
+            'title' => __('Currencies', 'SimpleProduct', false),
             'table' => 'simple_product_currency',
             'sortField' => 'priority',
             'createPosition' => 'bottom',
@@ -103,24 +109,32 @@ class AdminController
                     )
                 ),
                 array(
-                    'label' => __('Ratio', 'SimpleProduct', false) . ' (' . Model::getCurrency() . ')',
-                    'field' => 'ratio',
+                    'label' => __('Rate', 'SimpleProduct', false),
+                    'field' => 'rate',
                     'transformations' => array('Trim'),
                     'validators' => array(
                         'Required',
                         array('Regex', '/^[0-9]+(\.[0-9]+)?$/', __('Incorrect value. Eg. value 1.123', 'SimpleProduct', false)),
                         array('NotInArray', array('0'))
-                    )
+                    ),
+                    'note' => __('Rate when converting from / to this currency. Calculations are done this way: currency1 / ratio1 = currency2 / ratio2. We suggest to set your main currency ratio to 1 to ease the calculations.', 'SimpleProduct', false)
                 )
 
             )
         );
         $config = ipFilter('SimpleProduct_countriesGridConfig', $config);
 
-        return ipGridController($config);
+        $answer = '';
+        if (ipRequest()->getRequest('method') == '') {
+            $answer .= '<p class="alert alert-success">' . __('You have to use this module only if you enter products / shipping rates in different currencies. If you use the single currency, you can skip filling this table.', 'SimpleProduct') . '</p>';
+            $answer .= ipGridController($config);
+        } else {
+            $answer = ipGridController($config);
+        }
+
+        return $answer;
     }
 
-    //TODOX remove if unused
 //    /**
 //     * @ipSubmenu Settings
 //     */
