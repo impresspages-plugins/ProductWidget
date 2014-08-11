@@ -66,16 +66,6 @@ class AdminController
                     'validators' => array('Required', array('Regex', '/^[A-Z][A-Z][A-Z]$/'))
                 ),
                 array(
-                    'type' => 'Integer',
-                    'label' => __('Priority (optional)', 'SimpleProduct', false),
-                    'hint' => __(
-                        'Set priority number to influence default alphabetical order.',
-                        'SimpleProduct',
-                        false
-                    ),
-                    'field' => 'priority'
-                ),
-                array(
                     'type' => 'Checkbox',
                     'label' => __('Default', 'SimpleProduct', false),
                     'hint' => __('Select one country to be the default one.', 'SimpleProduct', false),

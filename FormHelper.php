@@ -372,6 +372,9 @@ class FormHelper
         $defaultCountry = CountryModel::getDefaultCountry();
         $orderCurrency = $widgetData['currency'];
         $deliveryPrice = ipConvertCurrency($defaultCountry['deliveryCost'], $defaultCountry['currency'], $orderCurrency);
+        if ($deliveryPrice == false) {
+            $deliveryPrice = $defaultCountry['deliveryCost'];
+        }
         $form->addField(new \Ip\Form\Field\Info(
                 array(
                     'name' => 'cost',

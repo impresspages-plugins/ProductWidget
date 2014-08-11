@@ -90,7 +90,7 @@ class SiteController
                 unset($orderData['securityToken']);
                 unset($orderData['sa']);
                 unset($orderData['antispam']);
-                $orderData['currency'] = Model::getCurrency();
+                $orderData['currency'] = $widgetData['currency'];
                 $widgetDataKeys = array ('title' => 1, 'alias' => 1, 'type' => 1, 'description' => 1, 'price' => 1);
                 $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
                 $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
@@ -110,7 +110,7 @@ class SiteController
                 unset($orderData['securityToken']);
                 unset($orderData['sa']);
                 unset($orderData['antispam']);
-                $orderData['currency'] = Model::getCurrency();
+                $orderData['currency'] = $widgetData['currency'];
                 $widgetDataKeys = array ('title' => 1, 'fileOnSaleName' => 1, 'alias' => 1, 'type' => 1, 'description' => 1, 'price' => 1);
                 $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
                 $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
@@ -129,7 +129,7 @@ class SiteController
                 unset($orderData['securityToken']);
                 unset($orderData['sa']);
                 unset($orderData['antispam']);
-                $orderData['currency'] = Model::getCurrency();
+                $orderData['currency'] = $widgetData['currency'];
                 $widgetDataKeys = array ('title' => 1, 'alias' => 1, 'type' => 1, 'description' => 1, 'price' => 1);
                 $viableWidgetData = array_intersect_key($widgetData, $widgetDataKeys);
                 $orderData = array_merge($orderData, $viableWidgetData); //merging vice may open a security hole to change the price via checkout
@@ -292,8 +292,12 @@ class SiteController
         if (!$country) {
             throw new \Ip\Exception('Country doesn\'t exist: ' . $countryTitle);
         }
+        $cost = ipConvertCurrency($country['deliveryCost'], $country['currency'], $orderCurrency);
+        if ($cost == false) {
+            $cost = $country['deliveryCost'];
+        }
         $viewData = array(
-            'cost' => ipConvertCurrency($country['deliveryCost'], $country['currency'], $orderCurrency),
+            'cost' => $cost,
             'currency' => $orderCurrency
         );
         $html = ipView('view/costField.php', $viewData)->render();
