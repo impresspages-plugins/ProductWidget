@@ -147,7 +147,7 @@ class SiteController
         }
 
         $paymentOptions = array (
-            'id' => $orderId,
+            'id' => 'SimpleProduct_' . $orderId,
             'title' => $orderData['title'],
             'price' => $orderData['price'] * 100,
             'currency' => $orderData['currency'],
