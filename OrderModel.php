@@ -81,6 +81,94 @@ class OrderModel
 
 
     /**
+     * Mark order as paid and send notifications
+     * @param $id
+     * @return bool
+     */
+    public static function processPayment($id)
+    {
+        $order = self::get($id);
+        if (!$order) {
+            return false;
+        }
+
+        self::markAsPaid($id);
+        self::notifyAboutPurchase($id);
+    }
+
+    protected static function markAsPaid($id)
+    {
+        $count = ipDb()->udpate('simple_product_order', array('isPaid' => 1), array('id' => $id));
+        return $count;
+    }
+
+    protected static function notifyAboutPurchase($id)
+    {
+        $order = OrderModel::get($id);
+        if (!$order) {
+            ipLog()->error('SimpleProduct.missingOrder: Order doesn\'t exist', array('id' => $id));
+            return;
+        }
+        ipEvent('SimpleProduct_orderPaid', $order);
+
+
+        $viewData = array(
+            'order' => $order
+        );
+
+        $emailData = array(
+            'content' => ipView('email/physicalOrder.php', $viewData)
+        );
+        $emailHtml = ipEmailTemplate($emailData);
+        $files = null;
+        if ($order['type'] == 'downloadable') {
+            $files = array(ipFile(array($order['fileOnSale'], $order['fileOnSaleName'])));
+        }
+
+        if(ipGetOption('SimpleProduct.notifyAdmin')) {
+            //email to the website owner
+            ipSendEmail(
+                ipGetOptionLang('Config.websiteEmail'),
+                ipGetOptionLang('Config.websiteTitle'),
+                ipGetOption('SimpleProduct.notifyEmail', ipGetOptionLang('Config.websiteEmail')),
+                ipGetOption('SimpleProduct.notifyEmail', ipGetOptionLang('Config.websiteEmail')),
+                str_replace('[[website_title]]', ipGetOptionLang('Config.websiteTitle'), __("New order", 'SimpleProduct', false)),
+                $emailHtml,
+                true,
+                true,
+                $files
+            );
+        }
+
+        if(ipGetOption('SimpleProduct.notifyCustomer') && $order['email']) {
+            //email to the customer
+            ipSendEmail(
+                ipGetOptionLang('Config.websiteEmail'),
+                ipGetOptionLang('Config.websiteTitle'),
+                $order['email'],
+                $order['name'],
+                str_replace('[[website_title]]', ipGetOptionLang('Config.websiteTitle'), __("New order", 'SimpleProduct', false)),
+                $emailHtml,
+                true,
+                true,
+                $files
+            );
+        }
+    }
+
+
+    public static function downloadUrl($orderId)
+    {
+        $order = self::get($orderId);
+        if (!$order) {
+            return false;
+        }
+
+        $downloadUrl = ipRouteUrl('SimpleProduct_download', array('orderId' => $orderId, 'securityCode' => $order['securityCode']));
+        return $downloadUrl;
+    }
+
+    /**
      * Returns $dat encoded to UTF8
      * @param mixed $dat array or string
      * @return string

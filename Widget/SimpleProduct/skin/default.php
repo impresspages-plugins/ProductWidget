@@ -20,7 +20,9 @@
         <?php echo $description ?>
         <?php if (!empty($price)) { ?>
             <p class="_price"><?php echo ipFormatPrice($price * 100  , $currency, 'SimpleProduct') ?></p>
+            <p><a href="<?php echo escAttr($checkoutUrl) ?>"><span data-widgetid="<?php echo (int) $widgetId ?>" class="_button button"><?php _e('Buy', 'SimpleProduct') ?></span></a></p>
+        <?php } elseif(ipAdminId()) { ?>
+            <p><?php echo __('WARNING: please set product price', 'SimpleProduct') ?></p>
         <?php } ?>
-        <p><a href="<?php echo escAttr($checkoutUrl) ?>"><span data-widgetid="<?php echo (int) $widgetId ?>" class="_button button"><?php _e('Buy', 'SimpleProduct') ?></span></a></p>
     </div>
 </div>

@@ -248,7 +248,7 @@ class SiteController
                 $response = ipView('view/page/physicalProductPurchased.php', $data);
                 break;
             case 'downloadable':
-                $downloadUrl = ipRouteUrl('SimpleProduct_download', array('orderId' => $orderId, 'securityCode' => $securityCode));
+                $downloadUrl = OrderModel::downloadUrl($orderId);
                 $data = array(
                     'order' => $order,
                     'downloadUrl' => $downloadUrl
