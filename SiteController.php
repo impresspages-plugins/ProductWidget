@@ -233,6 +233,15 @@ class SiteController
             throw new \Ip\Exception('Incorrect security code');
         }
 
+
+        if (!$order['isPaid']) {
+            $data = array(
+                'order' => $order
+            );
+            $response = ipView('view/page/paymentError.php', $data);
+            return $response;
+        }
+
         $response = '';
         switch($order['type']) {
             case 'virtual':

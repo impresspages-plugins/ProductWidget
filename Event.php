@@ -24,7 +24,7 @@ class Event
     public static function ipPaymentReceived($info)
     {
         $idParts = explode('_', $info['id']);
-        if ($idParts[0] != 'SimpleProduct' || count($idParts != 2)) {
+        if ($idParts[0] != 'SimpleProduct' || count($idParts) != 2) {
             return;
         }
 
