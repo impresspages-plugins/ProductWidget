@@ -3,5 +3,26 @@
     "version": "1.00",
     "name": "SimpleProduct",
     "description": "Sell physical, downloadable or virtual product on your site by simple placing a product widget. Easiest way to start selling.",
-    "author": "ImpressPages"
+    "author": "ImpressPages",
+    "options": [
+        {
+            "label": "Send new order notifications to the customer",
+            "name": "notifyCustomer",
+            "type": "checkbox",
+            "default": "1"
+        },
+        {
+            "label": "Send new order notifications to the manager",
+            "name": "notifyAdmin",
+            "type": "checkbox",
+            "default": "1"
+        },
+        {
+            "label": "Manager email",
+            "name": "notificationEmail",
+            "type": "text",
+            "default": "",
+            "note": "Leave blank to use default website email."
+        }
+    ]
 }

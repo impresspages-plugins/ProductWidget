@@ -98,7 +98,7 @@ class OrderModel
 
     protected static function markAsPaid($id)
     {
-        $count = ipDb()->udpate('simple_product_order', array('isPaid' => 1), array('id' => $id));
+        $count = ipDb()->update('simple_product_order', array('isPaid' => 1), array('id' => $id));
         return $count;
     }
 
@@ -117,7 +117,7 @@ class OrderModel
         );
 
         $emailData = array(
-            'content' => ipView('email/physicalOrder.php', $viewData)
+            'content' => ipView('view/email/physicalOrder.php', $viewData)
         );
         $emailHtml = ipEmailTemplate($emailData);
         $files = null;
@@ -130,8 +130,8 @@ class OrderModel
             ipSendEmail(
                 ipGetOptionLang('Config.websiteEmail'),
                 ipGetOptionLang('Config.websiteTitle'),
-                ipGetOption('SimpleProduct.notifyEmail', ipGetOptionLang('Config.websiteEmail')),
-                ipGetOption('SimpleProduct.notifyEmail', ipGetOptionLang('Config.websiteEmail')),
+                ipGetOption('SimpleProduct.notificationEmail', ipGetOptionLang('Config.websiteEmail')),
+                ipGetOption('SimpleProduct.notificationEmail', ipGetOptionLang('Config.websiteEmail')),
                 str_replace('[[website_title]]', ipGetOptionLang('Config.websiteTitle'), __("New order", 'SimpleProduct', false)),
                 $emailHtml,
                 true,
