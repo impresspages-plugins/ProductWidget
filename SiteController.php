@@ -14,7 +14,6 @@
 namespace Plugin\SimpleProduct;
 
 
-use Ip\Page;
 
 class SiteController
 {
@@ -31,7 +30,7 @@ class SiteController
             if (!in_array('User', $activePlugins)) {
                 throw new \Ip\Exception("Please install User plugin");
             }
-            return new \Ip\Response\Json(array('redirectUrl' => ipRouteUrl('User_login')));
+            return new \Ip\Response\Redirect(ipRouteUrl('User_login'));
         }
 
 

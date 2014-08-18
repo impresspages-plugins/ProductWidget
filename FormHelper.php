@@ -103,14 +103,26 @@ class FormHelper
         $values = array(
             array('physical', __('Physical', 'SimpleProduct', false)),
             array('downloadable', __('Downloadable', 'SimpleProduct', false)),
-            array('virtual', __('Virtual', 'SimpleProduct', false)),
         );
+
+        $note = null;
+        $activePlugins = \Ip\Internal\Plugins\Service::getActivePluginNames();
+        if (in_array('User', $activePlugins)) {
+            $values[] = array('virtual', __('Virtual', 'SimpleProduct', false));
+        } else {
+            $note = __('Please install User plugin to enable Virtual type products', 'SimpleProduct', false);
+        }
+
+
+
         $form->addField(new \Ip\Form\Field\Select(
                 array(
                     'name' => 'type',
                     'values' => $values,
                     'label' => __( 'Product type', 'SimpleProduct', false),
-                    'value' => empty($widgetData['type']) ? null : $widgetData['type']
+                    'value' => empty($widgetData['type']) ? null : $widgetData['type'],
+                    'note' => $note
+
                 )
             )
         );
