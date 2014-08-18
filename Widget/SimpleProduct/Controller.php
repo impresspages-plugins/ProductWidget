@@ -131,12 +131,12 @@ class Controller extends \Ip\WidgetController
             }
         }
 
-        if (is_array($currentData['fileOnSale'])) {
+        if (!empty($currentData['fileOnSale']) && is_array($currentData['fileOnSale'])) {
             foreach($currentData['fileOnSale'] as $file) {
                 ipUnbindFile($file, 'SimpleProduct', $widgetId, 'file/secure/');
             }
         }
-        if (is_array($postData['fileOnSale'])) {
+        if (!empty($postData['fileOnSale']) && is_array($postData['fileOnSale'])) {
             foreach($postData['fileOnSale'] as $file) {
                 ipBindFile($file, 'SimpleProduct', $widgetId, 'file/secure/');
             }
