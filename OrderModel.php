@@ -116,22 +116,39 @@ class OrderModel
             'order' => $order
         );
 
+        switch($order['type']) {
+            case 'physical':
+                $viewFile = 'view/email/physicalOrder.php';
+                break;
+            case 'virtual':
+                $viewFile = 'view/email/virtualOrder.php';
+                break;
+            case 'downloadable':
+                $viewFile = 'view/email/downloadableOrder.php';
+                $viewData['downloadUrl'] = OrderModel::downloadUrl($id);
+                break;
+        }
+
         $emailData = array(
-            'content' => ipView('view/email/physicalOrder.php', $viewData)
+            'content' => ipView($viewFile, $viewData)
         );
         $emailHtml = ipEmailTemplate($emailData);
         $files = null;
         if ($order['type'] == 'downloadable') {
-            $files = array(ipFile(array($order['fileOnSale'], $order['fileOnSaleName'])));
+            $files = array(array(ipFile($order['fileOnSale']), $order['fileOnSaleName']));
         }
 
         if(ipGetOption('SimpleProduct.notifyAdmin')) {
             //email to the website owner
+            $adminEmail = ipGetOption('SimpleProduct.notificationEmail');
+            if (empty($adminEmail)) {
+                $adminEmail = ipGetOptionLang('Config.websiteEmail');
+            }
             ipSendEmail(
                 ipGetOptionLang('Config.websiteEmail'),
                 ipGetOptionLang('Config.websiteTitle'),
-                ipGetOption('SimpleProduct.notificationEmail', ipGetOptionLang('Config.websiteEmail')),
-                ipGetOption('SimpleProduct.notificationEmail', ipGetOptionLang('Config.websiteEmail')),
+                $adminEmail,
+                $adminEmail,
                 str_replace('[[website_title]]', ipGetOptionLang('Config.websiteTitle'), __("New order", 'SimpleProduct', false)),
                 $emailHtml,
                 true,

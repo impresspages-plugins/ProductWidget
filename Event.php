@@ -13,12 +13,17 @@
 
 namespace Plugin\SimpleProduct;
 
+
+
 class Event
 {
     public static function ipBeforeController()
     {
         ipAddCss('assets/simpleProduct.css');
         ipAddJs('assets/simpleProduct.js');
+        if (!function_exists('ipReplacePlaceholders')) {
+            require_once('compatibility.php');
+        }
     }
 
     public static function ipPaymentReceived($info)

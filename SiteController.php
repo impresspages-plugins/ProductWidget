@@ -170,6 +170,9 @@ class SiteController
         if ($order['securityCode'] != $securityCode) {
             throw new \Ip\Exception('Incorrect security code');
         }
+        if (!$order['isPaid']) {
+            throw new \Ip\Exception('This order haven\'t been paid yet.');
+        }
 
         $file = ipFile('file/secure/' . $order['fileOnSale']);
 
