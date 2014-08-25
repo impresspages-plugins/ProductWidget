@@ -107,7 +107,7 @@ class AdminController
                         array('Regex', '/^[0-9]+(\.[0-9]+)?$/', __('Incorrect value. Eg. value 1.123', 'SimpleProduct', false)),
                         array('NotInArray', array('0'))
                     ),
-                    'note' => __('Rate when converting from / to this currency. Calculations are done this way: currency1amount * ratio1 = amount2amount * ratio2. We suggest to set your main currency ratio to 1 to ease the calculations.', 'SimpleProduct', false)
+                    'note' => __('Rate when converting from / to this currency. Calculations are done using the equation: currency1amount / ratio1 = currency2amount / ratio2. We suggest to set your main currency ratio to 1 to ease the calculations. Let say USD is set to 1. Then setting EUR = 0.76 means that 1 USD is equal to 0.76 EUR.', 'SimpleProduct', false)
                 )
 
             )

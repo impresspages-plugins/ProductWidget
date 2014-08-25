@@ -24,7 +24,7 @@ class Job
         $sourceRate = CurrencyModel::getCurrencyRate($sourceCurrency);
         $destinationRate = CurrencyModel::getCurrencyRate($destinationCurrency);
         if ($sourceRate !== null && $destinationRate !== null) {
-            $newAmount = $amount / $destinationRate * $sourceRate;
+            $newAmount = $amount / $sourceRate * $destinationRate;
             return $newAmount;
         }
     }
