@@ -125,16 +125,7 @@ class AdminController
         return $answer;
     }
 
-//    /**
-//     * @ipSubmenu Settings
-//     */
-//    public function settings()
-//    {
-//        $url = ipActionUrl(array('aa' => 'Plugins.index', 'disableAdminNavbar' => 1));
-//        $url .= '#/hash=&plugin=SimpleProduct';
-//        //return new \Ip\Response\Redirect($url);
-//        return '<iframe style="margin-left: -300px; width: 600px; height: 300px;" src="' . $url . '"></iframe>';
-//    }
+
 
 
     public function widgetPopupForm()
