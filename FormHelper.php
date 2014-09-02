@@ -383,7 +383,7 @@ class FormHelper
 
         $defaultCountry = CountryModel::getDefaultCountry();
         $orderCurrency = $widgetData['currency'];
-        $deliveryPrice = ipConvertCurrency($defaultCountry['deliveryCost'], $defaultCountry['currency'], $orderCurrency);
+        $deliveryPrice = ipJob('ipConvertCurrency', array('amount' => $defaultCountry['deliveryCost'], 'destinationCurrency' => $defaultCountry['currency'], 'sourceCurrency' => $orderCurrency));
         if ($deliveryPrice == false) {
             $deliveryPrice = $defaultCountry['deliveryCost'];
         }
