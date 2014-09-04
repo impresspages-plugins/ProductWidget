@@ -78,7 +78,7 @@ class Controller extends \Ip\WidgetController
         }
 
         if (empty($data['images']) || !is_array($data['images'])) {
-            $data['images'] = [];
+            $data['images'] = array();
         }
         $data['originalImages'] = $data['images'];
 

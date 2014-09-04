@@ -6,6 +6,11 @@
     "author": "ImpressPages",
     "options": [
         {
+            "label": "",
+            "type": "Info",
+            "html": "<p class=\"alert alert-info\">This plugin requires at least one payment method to be installed. Press \"add\" button on the left top to install one if you haven't yet.</p>"
+        },
+        {
             "label": "Send new order notifications to the customer",
             "name": "notifyCustomer",
             "type": "checkbox",
