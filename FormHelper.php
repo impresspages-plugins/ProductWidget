@@ -32,14 +32,6 @@ class FormHelper
             )
         );
 
-        $form->addField(new \Ip\Form\Field\Text(
-                array(
-                    'name' => 'alias',
-                    'label' => __( 'Alias (unique identificator)', 'SimpleProduct', false ),
-                    'value' => empty($widgetData['alias']) ? null : $widgetData['alias']
-                )
-            )
-        );
 
         $form->addField(new \Ip\Form\Field\Currency(
                 array(
@@ -158,6 +150,15 @@ class FormHelper
             )
         );
 
+        $form->addField(new \Ip\Form\Field\Text(
+                array(
+                    'name' => 'alias',
+                    'label' => __( 'Alias (unique identificator)', 'SimpleProduct', false ),
+                    'value' => empty($widgetData['alias']) ? null : $widgetData['alias'],
+                    'hint' => __( 'Could be used in PHP code to detect which product has been bought.', 'SimpleProduct', false ),
+                )
+            )
+        );
 
         return $form;
     }
