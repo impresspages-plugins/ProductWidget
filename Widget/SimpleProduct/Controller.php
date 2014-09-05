@@ -120,12 +120,12 @@ class Controller extends \Ip\WidgetController
      */
     public function update($widgetId, $postData, $currentData)
     {
-        if (is_array($currentData['images'])) {
+        if (!empty($currentData['images']) && is_array($currentData['images'])) {
             foreach($currentData['images'] as $image) {
                 ipUnbindFile($image, 'SimpleProduct', $widgetId);
             }
         }
-        if (is_array($postData['images'])) {
+        if (!empty($postData['images']) && is_array($postData['images'])) {
             foreach($postData['images'] as $image) {
                 ipBindFile($image, 'SimpleProduct', $widgetId);
             }
