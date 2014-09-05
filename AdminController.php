@@ -60,7 +60,7 @@ class AdminController
                     'validators' => array('Required')
                 ),
                 array(
-                    'label' => __('Delivery currency', 'SimpleProduct', false),
+                    'label' => __('Currency', 'SimpleProduct', false),
                     'field' => 'currency',
                     'transformations' => array('Trim', 'UpperCase'),
                     'validators' => array('Required', array('Regex', '/^[A-Z][A-Z][A-Z]$/'))

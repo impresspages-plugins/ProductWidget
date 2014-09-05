@@ -42,7 +42,7 @@ class SiteController
             case 'physical':
                 $countries = CountryModel::getCountryList();
                 if (empty($countries)) {
-                    return __('At least one country has to be set in <a href="' . ipActionUrl(array('aa' => 'SimpleProduct.countries')) . '">SimpleProduct plugin</a>.', 'SimpleProduct', false);
+                    return __('Please ste up <a href="' . ipActionUrl(array('aa' => 'SimpleProduct.countries')) . '">delivery prices</a> for physical products.', 'SimpleProduct', false);
                 }
                 return $this->physicalProductOrderForm($widgetId);
                 break;
@@ -153,6 +153,18 @@ class SiteController
             'successUrl' => $successUrl,
         );
         $paymentUrl = ipEcommerce()->paymentUrl($paymentOptions);
+
+        if (empty($paymentUrl)) {
+            return new \Ip\Response\Json(array(
+                    'status' => 'error',
+                    'error' => __('Please install at least one payment method plugin.', 'SimpleProduct'),
+                    'alert' => __('Please install at least one payment method plugin.', 'SimpleProduct')
+            ));
+
+        }
+
+
+
         return new \Ip\Response\Json(array(
                 'status' => 'success',
                 'redirectUrl' => $paymentUrl
